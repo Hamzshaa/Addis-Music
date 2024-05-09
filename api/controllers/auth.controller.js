@@ -18,6 +18,7 @@ export const signup = async (req, res, next) => {
   if (user) {
     return next(errorHandler(400, "Email is already registered."));
   }
+  console.log("SIGN UP: ", req.body);
 
   const hashedPassword = bcryptjs.hashSync(password1, 10);
 
@@ -26,9 +27,13 @@ export const signup = async (req, res, next) => {
     password: hashedPassword,
   });
 
+  const token = jwt.sign({ id: newUser._id }, process.env.SECRET_KEY);
+
+  const { password: pass, ...rest } = newUser._doc;
+
   try {
     await newUser.save();
-    res.status(200).json(newUser);
+    res.clearCookie("addisMusicAccessToken").status(200).json(newUser);
   } catch (error) {
     next(error);
   }
@@ -71,6 +76,7 @@ export const signin = async (req, res, next) => {
 
 export const signout = (req, res, next) => {
   try {
+    console.log("Sign Out called");
     res
       .clearCookie("addisMusicAccessToken")
       .status(200)
