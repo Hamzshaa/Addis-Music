@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { signup } from "../actions/userActions";
 
 export default function SignUp() {
   const [inputs, setinputs] = useState({
@@ -8,9 +10,9 @@ export default function SignUp() {
     password1: "",
     password2: "",
   });
-  //   const { loading, error } = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
-  //   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setinputs((prev) => {
@@ -22,33 +24,15 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      //   dispatch(signInStart());
-      const res = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(inputs),
-      });
-
-      const data = await res.json(); //eslint-disable-line
-
-      if (res.ok) {
-        // dispatch(signInSuccess(null));
-        navigate("/signin");
-      } else {
-        // dispatch(signInFailure(data.message));
-      }
-    } catch (error) {
-      //   dispatch(signInFailure(error.message));
-    }
+    dispatch(signup(inputs));
   };
 
   return (
     <Sign>
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
+        {error && <Error>{error}</Error>}
+
         <div>
           <label>Email</label>
           <input
@@ -76,7 +60,9 @@ export default function SignUp() {
             value={inputs.password2}
           />
         </div>
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={loading}>
+          Sign Up
+        </button>
       </form>
 
       <LinkToSignIn>
@@ -126,6 +112,17 @@ const Sign = styled.div`
   button:active {
     background: #6f2f9e;
   }
+`;
+
+const Error = styled.div`
+  background-color: #f2a9a9;
+  border-radius: 4px;
+  color: #c20101;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  text-align: center;
 `;
 
 const LinkToSignIn = styled.div`

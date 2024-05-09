@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSongs } from "./actions/songActions";
 import Home from "./pages/Home";
@@ -8,16 +8,16 @@ import Navbar from "./components/Navbar";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import AddSong from "./pages/AddSong";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   const dispatch = useDispatch();
   const { songs, isLoading, error } = useSelector((state) => state.songs); // eslint-disable-line
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(fetchSongs());
   }, [dispatch]);
-
-  // console.log({ songs, isLoading, error });
 
   if (!songs) {
     return <div>Loading songs...</div>;
@@ -29,9 +29,17 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/add" element={<AddSong />} />
+          <Route
+            path="/signin"
+            element={currentUser ? <Navigate to="/" /> : <SignIn />}
+          />
+          <Route
+            path="/signup"
+            element={currentUser ? <Navigate to="/" /> : <SignUp />}
+          />
+          <Route element={<PrivateRoute />}>
+            <Route path="/add" element={<AddSong />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AppContainer>

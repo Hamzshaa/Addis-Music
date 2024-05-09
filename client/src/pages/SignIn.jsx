@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -6,9 +6,15 @@ import { login } from "../actions/userActions";
 
 export default function SignIn() {
   const [inputs, setInputs] = useState({ email: "", password: "" });
-  const { loading, error } = useSelector((state) => state.user);
-  //   const navigate = useNavigate();
+  const { loading, error, currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (currentUser !== null) {
+      navigate("/");
+    }
+  }, [currentUser, navigate]);
 
   const handleChange = (e) => {
     setInputs((prev) => {

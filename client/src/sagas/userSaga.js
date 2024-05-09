@@ -1,9 +1,9 @@
 import { takeEvery, call, put } from "redux-saga/effects";
-import { login } from "../actions/userActions";
+// import { login } from "../actions/userActions";
 import {
-  userLoginRequest,
   userLoginSuccess,
   userLoginFailure,
+  userLogout,
 } from "../reducers/userSlice";
 
 function* handleLogin(action) {
@@ -29,6 +29,25 @@ function* handleLogin(action) {
   }
 }
 
+function* handleLogout() {
+  try {
+    const response = yield call(fetch, "/api/auth/signout", {
+      method: "POST",
+    });
+
+    if (response.ok) {
+      console.log("userSaga.js", response.ok);
+      yield put(userLogout());
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 export function* watchHandleLogin() {
   yield takeEvery("user/userLoginRequest", handleLogin);
+}
+
+export function* watchHandleLogout() {
+  yield takeEvery("user/userLogout", handleLogout);
 }

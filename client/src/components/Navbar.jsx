@@ -1,11 +1,15 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { userLogout } from "../actions/userActions";
 
 export default function Navbar() {
   const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
-  console.log(currentUser);
+  const handleSignout = async () => {
+    dispatch(userLogout());
+  };
 
   return (
     <NavContainer>
@@ -42,7 +46,7 @@ export default function Navbar() {
         </Menus>
       </Nav>
       {currentUser ? (
-        <Sign>Sign Out</Sign>
+        <Sign onClick={handleSignout}>Sign Out</Sign>
       ) : (
         <Sign>
           <Link to="signin">Sign In</Link>
