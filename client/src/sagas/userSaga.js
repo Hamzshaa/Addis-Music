@@ -44,10 +44,16 @@ function* handleLogout() {
   }
 }
 
+function* handleSignup(action) {} //eslint-disable-line
+
 export function* watchHandleLogin() {
   yield takeEvery("user/userLoginRequest", handleLogin);
 }
 
 export function* watchHandleLogout() {
   yield takeEvery("user/userLogout", handleLogout);
+}
+
+export function* watchHandleSignup() {
+  yield takeEvery("user/userSignupRequest", handleSignup);
 }
