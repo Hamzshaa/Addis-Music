@@ -77,12 +77,28 @@ const Nav = styled.nav`
   justify-content: space-between;
   max-width: 800px;
   width: 100%;
+
+  /* @media (max-width: 768px) {
+    font-size: 1.2rem;
+  } */
+
+  @media (max-width: 576px) {
+    padding: 1rem 1rem 1rem 0.4rem;
+  }
 `;
 
 const Logo = styled.h1`
   font-size: 1.5rem;
   font-weight: 600;
   color: white;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 1rem;
+  }
 `;
 
 const Menus = styled.div`
@@ -101,25 +117,32 @@ const Menus = styled.div`
   p:active {
     color: #ffffff;
   }
+
+  @media (max-width: 576px) {
+    gap: 0.8rem;
+    p {
+      font-size: 0.9rem;
+    }
+  }
 `;
 
 const Sign = styled.div`
-  padding: 0rem 0.5rem;
-  background: #bb69ed;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: 600;
+  border-left: 1px solid #d1d0d0;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #ccc;
   width: 100px;
   height: 30px;
   margin: auto;
+  cursor: pointer;
   transition: all 0.3s;
+
   &:hover {
-    background: #6f2f9e;
+    color: #fff;
+  }
+  a {
+    color: white;
+    text-decoration: none;
   }
 `;
