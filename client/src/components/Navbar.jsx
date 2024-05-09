@@ -1,17 +1,49 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Navbar() {
+  const user = false;
   return (
     <NavContainer>
       <Nav>
-        <Logo>Addis Music</Logo>
+        <Link to="/">
+          {" "}
+          <Logo>Addis Music</Logo>
+        </Link>
         <Menus>
-          <p>Home</p>
-          <p>Add Music</p>
-          <p>About</p>
-          <p>Contact</p>
+          <Link
+            to="/      
+      "
+          >
+            <p>Home</p>
+          </Link>
+          <Link
+            to="/add   
+         "
+          >
+            <p>Add</p>
+          </Link>
+          {/* <Link
+            to="/about 
+           "
+          >
+            <p>About</p>
+          </Link>
+          <Link
+            to="contact
+            "
+          >
+            <p>Contact</p>
+          </Link> */}
         </Menus>
       </Nav>
+      {user ? (
+        <Sign>Sign Out</Sign>
+      ) : (
+        <Sign>
+          <Link to="signin">Sign In</Link>
+        </Sign>
+      )}
     </NavContainer>
   );
 }
@@ -24,6 +56,9 @@ const NavContainer = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
+  a {
+    text-decoration: none;
+  }
 `;
 
 const Nav = styled.nav`
@@ -57,5 +92,26 @@ const Menus = styled.div`
   }
   p:active {
     color: #ffffff;
+  }
+`;
+
+const Sign = styled.div`
+  padding: 0rem 0.5rem;
+  background: #bb69ed;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 30px;
+  margin: auto;
+  transition: all 0.3s;
+  &:hover {
+    background: #6f2f9e;
   }
 `;
