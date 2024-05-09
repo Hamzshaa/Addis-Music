@@ -1,20 +1,53 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { login } from "../actions/userActions";
 
 export default function SignIn() {
+  const [inputs, setInputs] = useState({ email: "", password: "" });
+  const { loading, error } = useSelector((state) => state.user);
+  //   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleChange = (e) => {
+    setInputs((prev) => {
+      return { ...prev, [e.target.id]: e.target.value };
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Handle Submit");
+    dispatch(login(inputs));
+  };
+
   return (
     <Sign>
       <h1>Sign In</h1>
-      <form>
+      <form onSubmit={handleSubmit}>
+        {error && <Error>{error}</Error>}
         <div>
           <label>Email</label>
-          <input type="email" />
+          <input
+            type="email"
+            id="email"
+            onChange={handleChange}
+            value={inputs.email}
+          />
         </div>
         <div>
           <label>Password</label>
-          <input type="password" />
+          <input
+            type="password"
+            id="password"
+            onChange={handleChange}
+            value={inputs.password}
+          />
         </div>
-        <button type="submit">Sign In</button>
+        <button type="submit" disabled={loading}>
+          Sign In
+        </button>
       </form>
 
       <LinkToSignUp>
@@ -64,6 +97,17 @@ const Sign = styled.div`
   button:active {
     background: #6f2f9e;
   }
+`;
+
+const Error = styled.div`
+  background-color: #f2a9a9;
+  border-radius: 4px;
+  color: #c20101;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  text-align: center;
 `;
 
 const LinkToSignUp = styled.div`

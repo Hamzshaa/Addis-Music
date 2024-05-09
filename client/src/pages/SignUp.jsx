@@ -18,7 +18,7 @@ export default function SignUp() {
     });
   };
 
-  console.log(inputs);
+  //   console.log(inputs);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -32,7 +32,7 @@ export default function SignUp() {
         body: JSON.stringify(inputs),
       });
 
-      const data = await res.json();
+      const data = await res.json(); //eslint-disable-line
 
       if (res.ok) {
         // dispatch(signInSuccess(null));

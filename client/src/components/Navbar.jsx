@@ -1,8 +1,12 @@
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Navbar() {
-  const user = false;
+  const { currentUser } = useSelector((state) => state.user);
+
+  console.log(currentUser);
+
   return (
     <NavContainer>
       <Nav>
@@ -37,7 +41,7 @@ export default function Navbar() {
           </Link> */}
         </Menus>
       </Nav>
-      {user ? (
+      {currentUser ? (
         <Sign>Sign Out</Sign>
       ) : (
         <Sign>
