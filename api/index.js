@@ -16,7 +16,7 @@ mongoose
   .then(() => console.log("mongoDB connected"))
   .catch((e) => console.log(e.message));
 
-// const __dirname = path.resolve();
+const __dirname = path.resolve();
 
 app.use(cors({ origin: true }));
 app.use(cookieParser());
@@ -26,15 +26,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/auth", authRoute);
 app.use("/api/music", musicRoute);
-// app.use("/api/user", userRoute);
-// app.use("/api/books", bookRoute);
-// app.use("/api/charts", chartRoute);
 
-// app.use(express.static(path.join(__dirname, "/client/dist")));
+app.use(express.static(path.join(__dirname, "/client/dist")));
 
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000");
