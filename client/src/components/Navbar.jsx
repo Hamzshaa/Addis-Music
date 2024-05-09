@@ -32,7 +32,7 @@ const Nav = styled.nav`
   text-align: center;
   display: flex;
   justify-content: space-between;
-  max-width: 900px;
+  max-width: 800px;
   width: 100%;
 `;
 

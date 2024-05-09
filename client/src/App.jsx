@@ -12,7 +12,7 @@ function App() {
     dispatch(fetchSongs());
   }, [dispatch]);
 
-  console.log({ songs, isLoading, error });
+  // console.log({ songs, isLoading, error });
 
   if (!songs) {
     return <div>Loading songs...</div>;
