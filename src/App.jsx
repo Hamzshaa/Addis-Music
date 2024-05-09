@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSongs } from "./actions/songActions";
+import Home from "./pages/Home";
+import styled from "styled-components";
 
 function App() {
   const dispatch = useDispatch();
@@ -17,16 +19,16 @@ function App() {
   }
 
   return (
-    <div>
-      {songs.map((song) => (
-        <div key={song.id}>
-          <h2>{song.title}</h2>
-          <p>{song.artist}</p>
-          {console.log({ songs, isLoading, error })}
-        </div>
-      ))}
-    </div>
+    <AppContainer>
+      <Home />
+    </AppContainer>
   );
 }
+
+const AppContainer = styled.div`
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+`;
 
 export default App;
