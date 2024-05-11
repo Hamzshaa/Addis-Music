@@ -3,11 +3,7 @@ import { getSongsSuccess, getSongsError } from "../reducers/songSlice";
 
 function* workFetchSongs() {
   try {
-    const songs = yield call(() =>
-      fetch(
-        "https://www.theaudiodb.com/api/v1/json/2/mvid.php?i=112024&t=32793500"
-      )
-    );
+    const songs = yield call(() => fetch("api/music/"));
     const formattedSongs = yield songs.json();
     // const formattedSongsShortened = formattedSongs.slice(0, 10);
     // yield put(getSongsSuccess(formattedSongsShortened));

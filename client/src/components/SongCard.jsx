@@ -1,20 +1,46 @@
 import styled from "styled-components";
 import propTypes from "prop-types";
 import { FaPlay } from "react-icons/fa";
+import { useState } from "react";
 
-export default function SongCard({ islast, title, artist, img }) {
+export default function SongCard({
+  song,
+  islast,
+  title,
+  artist,
+  playSong,
+  id,
+}) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  let audioElement = null;
+
+  const togglePlayPause = () => {
+    if (audioElement && !audioElement.paused) {
+      audioElement.pause();
+      setIsPlaying(false);
+    } else {
+      if (!audioElement) {
+        audioElement = new Audio(`./${song}`);
+        audioElement.addEventListener("ended", () => {
+          setIsPlaying(false);
+        });
+      }
+      audioElement.play();
+      setIsPlaying(true);
+    }
+  };
   return (
     <SongCardWrapper>
       <CardContainer>
         <ImgWrapper>
-          <img src={img} alt="" />
+          <img src="../assets/music-disc.png" alt="" />
         </ImgWrapper>
         <Info>
           <Title>{title}</Title>
           <Artist>{artist}</Artist>
         </Info>
 
-        <PlayButton>
+        <PlayButton onClick={() => playSong(song)}>
           <FaPlay />
         </PlayButton>
       </CardContainer>
@@ -102,4 +128,7 @@ SongCard.propTypes = {
   title: propTypes.string,
   artist: propTypes.string,
   img: propTypes.string,
+  song: propTypes.string,
+  id: propTypes.string,
+  playSong: propTypes.func,
 };

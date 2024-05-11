@@ -1,6 +1,6 @@
 import { createAction } from "@reduxjs/toolkit";
 
-export const fetchSongs = createAction("user/fetchSongs");
+export const fetchSongs = createAction("songs/fetchSongs");
 export const signInUser = createAction("songs/fetchSongs");
 export const fetchSongsSuccess = createAction("songs/fetch/success");
 export const fetchSongsFailure = createAction("songs/fetch/failure");
