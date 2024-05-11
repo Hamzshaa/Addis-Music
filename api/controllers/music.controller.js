@@ -1,7 +1,6 @@
 import { errorHandler } from "../utils/errorHandler.js";
 import path from "path";
 import fs from "fs";
-import { v4 as uuid } from "uuid";
 import formidable from "formidable";
 import Music from "../models/music.model.js";
 import User from "../models/auth.model.js";
