@@ -29,7 +29,6 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route
             path="/signin"
             element={currentUser ? <Navigate to="/" /> : <SignIn />}
@@ -39,6 +38,7 @@ function App() {
             element={currentUser ? <Navigate to="/" /> : <SignUp />}
           />
           <Route element={<PrivateRoute />}>
+            <Route path="/" element={<Home />} />
             <Route path="/add" element={<AddSong />} />
             <Route path="/edit/:songId" element={<EditSong />} />
           </Route>

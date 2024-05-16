@@ -47,6 +47,7 @@ export default function AddSong() {
 
   return (
     <AddSongContainer>
+      <h1>Add Song</h1>
       <form onSubmit={handleSubmit}>
         {error && <Error>{error}</Error>}
         <div>
@@ -84,12 +85,19 @@ export default function AddSong() {
 
 const AddSongContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 90%;
   max-width: 500px;
   margin: 0 auto;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+  }
 
   form {
     display: flex;

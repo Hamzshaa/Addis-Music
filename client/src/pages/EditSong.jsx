@@ -65,6 +65,7 @@ export default function EditSong() {
 
   return (
     <EditSongContainer>
+      <h1>Edit Song</h1>
       <form onSubmit={handleSubmit}>
         {error && <Error>{error}</Error>}
         <div>
@@ -102,12 +103,19 @@ export default function EditSong() {
 
 const EditSongContainer = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 90%;
   max-width: 500px;
   margin: 0 auto;
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+  }
 
   form {
     display: flex;

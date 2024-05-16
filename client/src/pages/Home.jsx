@@ -66,6 +66,7 @@ const Button = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 3rem;
 `;
 
 const AddMusicButton = styled.button`
@@ -82,5 +83,10 @@ const AddMusicButton = styled.button`
   transition: all 0.3s;
   &:hover {
     background: #ac2efb;
+  }
+
+  @media (max-width: 568px) {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
   }
 `;
