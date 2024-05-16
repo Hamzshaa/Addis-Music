@@ -3,33 +3,21 @@ import SongList from "../components/SongList";
 import { Link } from "react-router-dom";
 
 import ReactPlayer from "react-player/youtube";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Player from "../components/Player";
-import { useSelector } from "react-redux";
-
-// const data = [
-//   {
-//     title: "Brand New Man",
-//     artist: "Brooks & Dunn, Luke Combs",
-//     url: "https://youtu.be/abaielFw_Xw?si=8DyXA42CKbIruVRN",
-//   },
-//   {
-//     title: "Fancy Like",
-//     artist: "Walker Hayes",
-//     url: "https://youtu.be/G_zuB-ogIBw?si=B2E4o_V6Fg_u3g0d",
-//   },
-//   {
-//     title: "Gone",
-//     artist: "Dierks Bentley",
-//     url: "https://www.youtube.com/watch?v=LXb3EKWsInQ",
-//   },
-// ];
+import { useDispatch, useSelector } from "react-redux";
+import { fetchSongs } from "../actions/songActions";
 
 export default function Home() {
+  const dispatch = useDispatch();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const playerRef = useRef(null);
   const { songs, isLoading, error } = useSelector((state) => state.songs); // eslint-disable-line
+
+  useEffect(() => {
+    dispatch(fetchSongs());
+  }, []);
 
   const handleEnded = () => {
     console.log("ended");

@@ -19,8 +19,6 @@ export default function SongList({
             id={song._id}
             title={song.title}
             artist={song.artist}
-            img={song.strAlbumThumb}
-            song={song.song}
             currentSongIndex={currentSongIndex}
             setCurrentSongIndex={setCurrentSongIndex}
             isPlaying={isPlaying}

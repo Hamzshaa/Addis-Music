@@ -62,3 +62,67 @@ export const getSongs = async (req, res, next) => {
     return next(error);
   }
 };
+
+export const getSong = async (req, res, next) => {
+  const { songId } = req.params;
+  try {
+    const song = await Music.findById(songId);
+
+    if (!song) {
+      return next(errorHandler(404, "Song not found"));
+    }
+
+    if (song.creator !== req.user.id) {
+      return next(errorHandler(403, "Unauthorized"));
+    }
+
+    res.status(200).json(song);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const editSong = async (req, res, next) => {
+  const { songId } = req.params;
+  const form = formidable({ multiples: true });
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      return next(errorHandler(400, "Error parsing form data"));
+    }
+    try {
+      let { title, artist, url } = fields;
+
+      title = title[0];
+      artist = artist[0];
+      url = url[0];
+
+      if (!title || !artist || !url) {
+        return next(errorHandler(422, "Fill in all fields."));
+      }
+
+      const song = await Music.findById(songId);
+
+      if (!song) {
+        return next(errorHandler(404, "Song not found"));
+      }
+
+      if (song.creator !== req.user.id) {
+        return next(errorHandler(403, "Unauthorized"));
+      }
+
+      const updatedSong = await Music.findByIdAndUpdate(
+        songId,
+        { title, artist, url },
+        { new: true }
+      );
+
+      if (!updatedSong) {
+        return next(errorHandler(400, "Error updating song"));
+      }
+
+      res.status(200).json(updatedSong);
+    } catch (error) {
+      return next(error);
+    }
+  });
+};

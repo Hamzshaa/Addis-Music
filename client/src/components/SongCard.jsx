@@ -13,6 +13,7 @@ export default function SongCard({
   setCurrentSongIndex,
   isPlaying,
   setIsPlaying,
+  id,
 }) {
   const [isCardPlaying, setIsCardPlaying] = useState(false);
 
@@ -40,7 +41,7 @@ export default function SongCard({
         </ImgWrapper>
         <Info>
           <Title>
-            <Link to="">{title}</Link>
+            <Link to={`/edit/${id}`}>{title}</Link>
           </Title>
           <Artist>{artist}</Artist>
         </Info>
@@ -161,6 +162,7 @@ const Divider = styled.div`
 SongCard.propTypes = {
   index: propTypes.number,
   islast: propTypes.bool,
+  id: propTypes.string,
   title: propTypes.string,
   artist: propTypes.string,
   currentSongIndex: propTypes.number,
