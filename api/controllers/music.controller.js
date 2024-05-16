@@ -12,47 +12,34 @@ export const addSong = async (req, res, next) => {
       return next(errorHandler(400, "Error parsing form data"));
     }
     try {
-      let { title, artist } = fields;
+      let { title, artist, url } = fields;
+
       title = title[0];
       artist = artist[0];
-      const song = files.song;
+      url = url[0];
 
-      if (!title || !artist || !song) {
+      if (!title || !artist || !url) {
         return next(errorHandler(422, "Fill in all fields."));
       }
 
-      if (song.size > 50000000) {
-        return next(
-          errorHandler(422, "Song size too big. Should be less than 50mb.")
-        );
+      const music = await Music.findOne({ url: url });
+
+      if (music && music.creator === req.user.id) {
+        return next(errorHandler(409, "Music already exists"));
       }
 
-      let fileType = song[0].originalFilename.split(".")[1];
-
-      let newFilename = song[0].newFilename + "." + fileType;
-      const newFilePath = path.resolve(
-        process.cwd(),
-        "client",
-        "public",
-        newFilename
-      );
-      fs.rename(song[0].filepath, newFilePath, async (err) => {
-        if (err) {
-          return next(errorHandler(400, "Error uploading song"));
-        } else {
-          const newMusic = await Music.create({
-            title: title,
-            artist: artist,
-            song: newFilename,
-            creator: req.user.id,
-          });
-          if (!newMusic) {
-            return next(errorHandler(400, "Error creating music"));
-          }
-
-          res.status(201).json(newMusic);
-        }
+      const newMusic = await Music.create({
+        title,
+        artist,
+        url,
+        creator: req.user.id,
       });
+
+      if (!newMusic) {
+        return next(errorHandler(400, "Error creating music"));
+      }
+
+      res.status(201).json(newMusic);
     } catch (error) {
       return next(error);
     }

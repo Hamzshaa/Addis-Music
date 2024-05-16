@@ -10,7 +10,7 @@ const musicSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    song: {
+    url: {
       type: String,
       required: true,
     },

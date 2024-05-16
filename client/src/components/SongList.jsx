@@ -1,43 +1,30 @@
 import styled from "styled-components";
 import SongCard from "./SongCard";
-import { useSelector } from "react-redux";
-import { useState } from "react";
+import propTypes from "prop-types";
 
-export default function SongList() {
-  const { songs, isLoading, error } = useSelector((state) => state.songs); // eslint-disable-line
-  const [audioElement, setAudioElement] = useState(null);
-
-  const playSong = async (song) => {
-    if (audioElement && !audioElement.paused) {
-      audioElement.pause();
-      console.log("paused");
-    } else {
-      if (!audioElement) {
-        console.log("Played");
-        const newAudioElement = await new Audio(`./${song}`);
-        setAudioElement(newAudioElement);
-
-        audioElement?.addEventListener("ended", (err) => {
-          if (err) console.log("Error playing song", err);
-        });
-      }
-
-      audioElement?.play();
-    }
-  };
-
+export default function SongList({
+  songs,
+  currentSongIndex,
+  setCurrentSongIndex,
+  isPlaying,
+  setIsPlaying,
+}) {
   return (
     <SongListContainer>
       {songs &&
-        songs?.map((song) => (
+        songs?.map((song, index) => (
           <SongCard
             key={song._id}
+            index={index}
             id={song._id}
             title={song.title}
             artist={song.artist}
             img={song.strAlbumThumb}
             song={song.song}
-            playSong={playSong}
+            currentSongIndex={currentSongIndex}
+            setCurrentSongIndex={setCurrentSongIndex}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
             islast={songs[songs.length - 1] === song}
           />
         ))}
@@ -48,3 +35,11 @@ export default function SongList() {
 const SongListContainer = styled.div`
   padding: 3rem 0;
 `;
+
+SongList.propTypes = {
+  songs: propTypes.array,
+  setCurrentSongIndex: propTypes.func,
+  currentSongIndex: propTypes.number,
+  isPlaying: propTypes.bool,
+  setIsPlaying: propTypes.func,
+};

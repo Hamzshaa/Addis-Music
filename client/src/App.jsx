@@ -9,6 +9,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import AddSong from "./pages/AddSong";
 import PrivateRoute from "./components/PrivateRoute";
+import EditSong from "./pages/EditSong";
 
 function App() {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ function App() {
           />
           <Route element={<PrivateRoute />}>
             <Route path="/add" element={<AddSong />} />
+            <Route path="/edit/:songId" element={<EditSong />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,47 +1,56 @@
 import styled from "styled-components";
 import propTypes from "prop-types";
-import { FaPlay } from "react-icons/fa";
-import { useState } from "react";
+import { FaPause, FaPlay } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function SongCard({
-  song,
+  index,
   islast,
   title,
   artist,
-  playSong,
-  id,
+  currentSongIndex,
+  setCurrentSongIndex,
+  isPlaying,
+  setIsPlaying,
 }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  let audioElement = null;
+  const [isCardPlaying, setIsCardPlaying] = useState(false);
 
-  const togglePlayPause = () => {
-    if (audioElement && !audioElement.paused) {
-      audioElement.pause();
-      setIsPlaying(false);
-    } else {
-      if (!audioElement) {
-        audioElement = new Audio(`./${song}`);
-        audioElement.addEventListener("ended", () => {
-          setIsPlaying(false);
-        });
-      }
-      audioElement.play();
+  useEffect(() => {
+    setIsCardPlaying(currentSongIndex == index);
+  }, [currentSongIndex, index]);
+
+  const play = () => {
+    setCurrentSongIndex(index);
+    if (!isPlaying) {
       setIsPlaying(true);
     }
   };
+
+  const handlePlayPause = () => {
+    setIsCardPlaying(!isPlaying);
+    setIsPlaying(!isPlaying);
+  };
+
   return (
-    <SongCardWrapper>
+    <SongCardWrapper isCardPlaying={isCardPlaying}>
       <CardContainer>
         <ImgWrapper>
-          <img src="../assets/music-disc.png" alt="" />
+          <img src="music-disc.png" alt="" />
         </ImgWrapper>
         <Info>
-          <Title>{title}</Title>
+          <Title>
+            <Link to="">{title}</Link>
+          </Title>
           <Artist>{artist}</Artist>
         </Info>
 
-        <PlayButton onClick={() => playSong(song)}>
-          <FaPlay />
+        <PlayButton onClick={() => play()}>
+          {isCardPlaying && isPlaying ? (
+            <FaPause onClick={handlePlayPause} />
+          ) : (
+            <FaPlay onClick={handlePlayPause} />
+          )}
         </PlayButton>
       </CardContainer>
       <Divider islast={islast} />
@@ -50,10 +59,18 @@ export default function SongCard({
 }
 
 const SongCardWrapper = styled.div`
+  box-sizing: border-box;
   max-width: 800px;
-  width: 100%;
+  width: 96%;
   margin-inline: auto;
-  background: linear-gradient(170deg, #f2f1f128, #fdfdfd, #bb63f260);
+  padding-inline: 2%;
+  background: ${({ isCardPlaying }) =>
+    isCardPlaying
+      ? "linear-gradient(181deg, #40245167, #f8f8f8, #4024513a)"
+      : "linear-gradient(90deg, #f2f1f128, #fdfdfd, #dbb0f50)"};
+
+  @media (max-width: 568px) {
+  }
 `;
 
 const CardContainer = styled.div`
@@ -61,21 +78,21 @@ const CardContainer = styled.div`
   gap: 1rem;
   padding: 1rem;
   align-items: center;
-  /* border-bottom: ${({ isLast }) =>
-    isLast ? "none" : "1px solid #d1d0d0"}; */
-  /* margin: 1rem; */
 `;
 
 const ImgWrapper = styled.div`
   width: 100px;
-  height: 100px;
+  height: 80px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   img {
     width: 100%;
     object-fit: cover;
-    border-radius: 4px;
+  }
+
+  @media (max-width: 568px) {
+    width: 70px;
   }
 `;
 
@@ -87,6 +104,16 @@ const Title = styled.p`
   font-size: 2rem;
   font-weight: 600;
   color: #333;
+  margin-top: -1.5rem;
+
+  a {
+    color: #333;
+    text-decoration: none;
+  }
+
+  @media (max-width: 568px) {
+    font-size: 1rem;
+  }
 `;
 
 const Artist = styled.p`
@@ -94,6 +121,10 @@ const Artist = styled.p`
   font-weight: 200;
   color: #414141;
   margin-bottom: -1.5rem;
+
+  @media (max-width: 568px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const PlayButton = styled.div`
@@ -110,6 +141,12 @@ const PlayButton = styled.div`
   &:hover {
     background: #6f2f9e;
   }
+
+  @media (max-width: 568px) {
+    padding: 0.5rem;
+    margin-right: 1rem;
+    font-size: 0.8rem;
+  }
 `;
 
 const Divider = styled.div`
@@ -121,14 +158,13 @@ const Divider = styled.div`
   display: ${({ islast }) => (islast ? "none" : "block")};
 `;
 
-// props validation
-
 SongCard.propTypes = {
+  index: propTypes.number,
   islast: propTypes.bool,
   title: propTypes.string,
   artist: propTypes.string,
-  img: propTypes.string,
-  song: propTypes.string,
-  id: propTypes.string,
-  playSong: propTypes.func,
+  currentSongIndex: propTypes.number,
+  setCurrentSongIndex: propTypes.func,
+  isPlaying: propTypes.bool,
+  setIsPlaying: propTypes.func,
 };
