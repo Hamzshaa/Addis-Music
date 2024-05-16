@@ -140,7 +140,7 @@ export const deleteSong = async (req, res, next) => {
       return next(errorHandler(403, "Unauthorized"));
     }
 
-    // await Music.findByIdAndDelete(songId);
+    await Music.findByIdAndDelete(songId);
 
     res.status(204).json({ message: "Song deleted" });
   } catch (error) {

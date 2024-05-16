@@ -63,7 +63,25 @@ export default function EditSong() {
     }
   };
 
-  const handleDelete = async () => {};
+  const handleDelete = async () => {
+    setError(null);
+    try {
+      const res = await fetch(`/api/music/delete/${songId}`, {
+        method: "DELETE",
+      });
+
+      const data = await res.json();
+      if (res.status != 204) {
+        setError(data.message);
+        return;
+      } else {
+        setError(null);
+        navigate("/");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   return (
     <EditSongContainer>
@@ -98,7 +116,9 @@ export default function EditSong() {
           />
         </div>
         <button type="submit">Update</button>
-        <Delete onClick={handleDelete}>Delete</Delete>
+        <Delete type="button" onClick={() => handleDelete()}>
+          Delete
+        </Delete>
       </form>
     </EditSongContainer>
   );

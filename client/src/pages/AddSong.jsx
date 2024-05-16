@@ -1,8 +1,10 @@
 import { useState } from "react";
 import ReactPlayer from "react-player";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function AddSong() {
+  const navigate = useNavigate();
   const [inputs, setInputs] = useState({ title: "", artist: "", url: "" });
   const [error, setError] = useState(null);
 
@@ -32,13 +34,15 @@ export default function AddSong() {
         method: "POST",
         body: songData,
       });
-
+      console.log(res);
       const data = await res.json();
+      console.log(data);
       if (!res.ok) {
         setError(data.message);
       } else {
         setInputs({ title: "", artist: "", url: "" });
         setError(null);
+        navigate("/");
       }
     } catch (error) {
       setError(error.message);
