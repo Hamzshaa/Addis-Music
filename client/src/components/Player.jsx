@@ -18,9 +18,14 @@ const Player = ({
   playerRef,
 }) => {
   const clickRef = useRef();
-  const [progress, setProgress] = useState(0);
+  // const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  let progress = (currentTime / duration) * 100;
+  if (isNaN(progress)) progress = 0;
+
+  console.log(progress);
 
   const PlayPause = () => {
     setIsPlaying(!isPlaying);
@@ -40,9 +45,9 @@ const Player = ({
     }
   }, [currentTime, playerRef]);
 
-  useEffect(() => {
-    setProgress((currentTime / duration) * 100 || 0);
-  }, [currentTime, duration]);
+  // useEffect(() => {
+  //   setProgress((currentTime / duration) * 100 || 0);
+  // }, []);
 
   const skipBack = () => {
     if (currentSongIndex === 0) {

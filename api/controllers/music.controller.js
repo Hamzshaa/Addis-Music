@@ -126,3 +126,24 @@ export const editSong = async (req, res, next) => {
     }
   });
 };
+
+export const deleteSong = async (req, res, next) => {
+  const { songId } = req.params;
+  try {
+    const song = await Music.findById(songId);
+
+    if (!song) {
+      return next(errorHandler(404, "Song not found"));
+    }
+
+    if (song.creator !== req.user.id) {
+      return next(errorHandler(403, "Unauthorized"));
+    }
+
+    // await Music.findByIdAndDelete(songId);
+
+    res.status(204).json({ message: "Song deleted" });
+  } catch (error) {
+    return next(error);
+  }
+};

@@ -63,6 +63,8 @@ export default function EditSong() {
     }
   };
 
+  const handleDelete = async () => {};
+
   return (
     <EditSongContainer>
       <h1>Edit Song</h1>
@@ -96,6 +98,7 @@ export default function EditSong() {
           />
         </div>
         <button type="submit">Update</button>
+        <Delete onClick={handleDelete}>Delete</Delete>
       </form>
     </EditSongContainer>
   );
@@ -149,6 +152,25 @@ const EditSongContainer = styled.div`
       border: none;
       cursor: pointer;
     }
+
+    button:hover {
+      background-color: #8b09db;
+    }
+  }
+`;
+
+const Delete = styled.button`
+  padding: 0.8rem;
+  font-size: 1rem;
+  background-color: #f22828 !important;
+  border-radius: 4px;
+  margin-top: 0 !important;
+  color: white;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ed0e0e !important;
   }
 `;
 
