@@ -6,7 +6,6 @@ const songSlice = createSlice({
     songs: [],
     isLoading: false,
     error: null,
-    selectedSong: null,
   },
   reducers: {
     fetchSongs: (state) => {
@@ -23,7 +22,6 @@ const songSlice = createSlice({
   },
 });
 
-export const { fetchSongs, getSongsSuccess, getSongsError } =
-  songSlice.actions;
+export const { fetchSongs, getSongsSuccess, getSongsError } = songSlice.actions;
 
 export default songSlice.reducer;
