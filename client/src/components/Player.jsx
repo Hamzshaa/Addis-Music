@@ -39,15 +39,31 @@ const Player = ({
   }, [currentSongIndex, playerRef]);
 
   useEffect(() => {
-    if (playerRef.current) {
-      const c = playerRef.current.getCurrentTime();
-      setCurrentTime(c);
-    }
-  }, [currentTime, playerRef]);
-
+    const interval = setInterval(() => {
+      if (playerRef.current) {
+        const c = playerRef.current.getCurrentTime();
+        setCurrentTime(c);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [playerRef]);
   // useEffect(() => {
   //   setProgress((currentTime / duration) * 100 || 0);
   // }, []);
+
+  function formatTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+
+    const formattedHours = String(hours).padStart(2, "0");
+    const formattedMinutes = String(minutes).padStart(2, "0");
+    const formattedSeconds = String(remainingSeconds).padStart(2, "0");
+
+    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+  }
 
   const skipBack = () => {
     if (currentSongIndex === 0) {
@@ -71,6 +87,10 @@ const Player = ({
         <p>{songs[currentSongIndex] ? songs[currentSongIndex].title : ""}</p>
       </Title>
       <Navigation className="navigation">
+        <TimeContainer>
+          <p>{formatTime(currentTime) || "00:00:00"}</p>
+          <p>{formatTime(duration) || "00:00:00"}</p>
+        </TimeContainer>
         <div className="navigation_wrapper" ref={clickRef}>
           <div className="seek_bar" style={{ width: `${progress}%` }}></div>
         </div>
@@ -157,6 +177,13 @@ const PlayerContainer = styled.div`
 `;
 
 const Title = styled.div``;
+
+const TimeContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 1rem 0.5rem;
+`;
 
 const Navigation = styled.div`
   .navigation_wrapper {
