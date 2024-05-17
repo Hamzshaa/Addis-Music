@@ -25,6 +25,10 @@ const Player = ({
   let progress = (currentTime / duration) * 100;
   if (isNaN(progress)) progress = 0;
 
+  // if (progress == Infinity || progress == 0) {
+  //   const d = playerRef.current.getDuration();
+  //   setDuration(d);
+  // }
   console.log(progress);
 
   const PlayPause = () => {
@@ -43,6 +47,11 @@ const Player = ({
       if (playerRef.current) {
         const c = playerRef.current.getCurrentTime();
         setCurrentTime(c);
+      }
+
+      if (progress == Infinity || progress == 0) {
+        const d = playerRef.current.getDuration();
+        setDuration(d);
       }
     }, 1000);
     return () => {
