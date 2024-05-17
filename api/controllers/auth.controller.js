@@ -33,7 +33,13 @@ export const signup = async (req, res, next) => {
 
   try {
     await newUser.save();
-    res.clearCookie("addisMusicAccessToken").status(200).json(newUser);
+    res
+      .status(200)
+      .cookie("addisMusicAccessToken", token, {
+        httpOnly: true,
+        maxAge: 2147483647,
+      })
+      .send(newUser);
   } catch (error) {
     next(error);
   }

@@ -36,7 +36,7 @@ const Player = ({
       const d = playerRef.current.getDuration();
       setDuration(d);
     }
-  }, [currentSongIndex, playerRef]);
+  }, [currentSongIndex, playerRef, isPlaying]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -49,14 +49,15 @@ const Player = ({
       clearInterval(interval);
     };
   }, [playerRef]);
-  // useEffect(() => {
-  //   setProgress((currentTime / duration) * 100 || 0);
-  // }, []);
 
   function formatTime(seconds) {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = Math.floor(seconds % 60);
+
+    if (isNaN(seconds)) {
+      return "00:00:00";
+    }
 
     const formattedHours = String(hours).padStart(2, "0");
     const formattedMinutes = String(minutes).padStart(2, "0");

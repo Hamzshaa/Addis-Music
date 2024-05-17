@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { signup } from "../actions/userActions";
 
@@ -11,7 +11,6 @@ export default function SignUp() {
     password2: "",
   });
   const { loading, error } = useSelector((state) => state.user);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -19,8 +18,6 @@ export default function SignUp() {
       return { ...prev, [e.target.id]: e.target.value };
     });
   };
-
-  //   console.log(inputs);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +35,7 @@ export default function SignUp() {
           <input
             type="email"
             id="email"
+            autoComplete="off"
             onChange={handleChange}
             value={inputs.email}
           />

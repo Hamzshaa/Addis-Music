@@ -12,6 +12,7 @@ export default function SongList({
   return (
     <SongListContainer>
       {songs &&
+        songs?.length > 0 &&
         songs?.map((song, index) => (
           <SongCard
             key={song._id}

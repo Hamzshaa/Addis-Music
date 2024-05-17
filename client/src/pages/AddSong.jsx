@@ -59,6 +59,7 @@ export default function AddSong() {
           <input
             type="text"
             id="title"
+            autoComplete="off"
             onChange={handleChange}
             value={inputs.title}
           />
@@ -68,6 +69,7 @@ export default function AddSong() {
           <input
             type="text"
             id="artist"
+            autoComplete="off"
             onChange={handleChange}
             value={inputs.artist}
           />
@@ -77,6 +79,7 @@ export default function AddSong() {
           <input
             type="text"
             id="url"
+            autoComplete="off"
             onChange={handleChange}
             value={inputs.url}
           />

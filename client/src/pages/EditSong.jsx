@@ -66,20 +66,14 @@ export default function EditSong() {
   const handleDelete = async () => {
     setError(null);
     try {
-      const res = await fetch(`/api/music/delete/${songId}`, {
+      await fetch(`/api/music/delete/${songId}`, {
         method: "DELETE",
       });
 
-      const data = await res.json();
-      if (res.status != 204) {
-        setError(data.message);
-        return;
-      } else {
-        setError(null);
-        navigate("/");
-      }
+      navigate("/");
     } catch (error) {
       setError(error.message);
+      navigate("/");
     }
   };
 
@@ -93,6 +87,7 @@ export default function EditSong() {
           <input
             type="text"
             id="title"
+            autoComplete="off"
             onChange={handleChange}
             value={inputs.title}
           />
@@ -102,6 +97,7 @@ export default function EditSong() {
           <input
             type="text"
             id="artist"
+            autoComplete="off"
             onChange={handleChange}
             value={inputs.artist}
           />
@@ -111,6 +107,7 @@ export default function EditSong() {
           <input
             type="text"
             id="url"
+            autoComplete="off"
             onChange={handleChange}
             value={inputs.url}
           />
