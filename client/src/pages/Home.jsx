@@ -27,6 +27,7 @@ export default function Home() {
       setCurrentSongIndex(0);
     }
   };
+
   return (
     <div>
       <Player
@@ -44,6 +45,8 @@ export default function Home() {
         // loop={true}
         ref={playerRef}
         onEnded={handleEnded}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
         style={{ display: "none" }}
       />
       <SongList

@@ -36,7 +36,7 @@ export default function SongCard({
   return (
     <SongCardWrapper isCardPlaying={isCardPlaying}>
       <CardContainer>
-        <ImgWrapper>
+        <ImgWrapper className="rotate" isPlaying={isCardPlaying}>
           <img src="music-disc.png" alt="" />
         </ImgWrapper>
         <Info>
@@ -90,6 +90,19 @@ const ImgWrapper = styled.div`
   img {
     width: 100%;
     object-fit: cover;
+    transition: transform 0.5s ease;
+
+    @keyframes rotateAnim {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    animation: ${({ isPlaying }) =>
+      isPlaying ? `rotateAnim 4s infinite linear` : ""};
   }
 
   @media (max-width: 568px) {

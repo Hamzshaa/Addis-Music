@@ -14,7 +14,7 @@ const app = express();
 mongoose
   .connect(process.env.MONGODB_URL)
   .then(() => console.log("mongoDB connected"))
-  .catch((e) => console.log(e.message));
+  .catch((e) => console.log("Error connecting mongoDB: ", e.message));
 
 const __dirname = path.resolve();
 
