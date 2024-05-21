@@ -10,6 +10,7 @@ import SignUp from "./pages/SignUp";
 import AddSong from "./pages/AddSong";
 import PrivateRoute from "./components/PrivateRoute";
 import EditSong from "./pages/EditSong";
+import { setCurrentSongIndex } from "./reducers/songSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ function App() {
   }, [dispatch]);
 
   if (!songs) {
+    dispatch(setCurrentSongIndex(0));
     return <div>Loading songs...</div>;
   }
 
