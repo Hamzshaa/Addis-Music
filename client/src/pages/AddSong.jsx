@@ -1,12 +1,14 @@
-import { useState } from "react";
-import ReactPlayer from "react-player";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { addSongRequest } from "../actions/songActions";
 
 export default function AddSong() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { error, isLoading } = useSelector((state) => state.songs);
   const [inputs, setInputs] = useState({ title: "", artist: "", url: "" });
-  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setInputs((prev) => {
@@ -14,46 +16,22 @@ export default function AddSong() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    if (!isLoading && !error) {
+      navigate("/");
+    }
+  }, [error, navigate, isLoading]);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError(null);
-
-    const isLinkValid = ReactPlayer.canPlay(inputs.url);
-    if (!isLinkValid) {
-      setError("Invalid YouTube URL");
-      return;
-    }
-
-    const songData = new FormData();
-    songData.set("title", inputs.title);
-    songData.set("artist", inputs.artist);
-    songData.set("url", inputs.url);
-
-    try {
-      const res = await fetch("/api/music/add", {
-        method: "POST",
-        body: songData,
-      });
-      console.log(res);
-      const data = await res.json();
-      console.log(data);
-      if (!res.ok) {
-        setError(data.message);
-      } else {
-        setInputs({ title: "", artist: "", url: "" });
-        setError(null);
-        navigate("/");
-      }
-    } catch (error) {
-      setError(error.message);
-    }
+    dispatch(addSongRequest(inputs));
   };
 
   return (
     <AddSongContainer>
       <h1>Add Song</h1>
       <form onSubmit={handleSubmit}>
-        {error && <Error>{error}</Error>}
+        {error && typeof error != "object" && <Error>{error}</Error>}
         <div>
           <label>Title</label>
           <input

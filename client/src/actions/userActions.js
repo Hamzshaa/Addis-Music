@@ -57,7 +57,6 @@ export const login = (credentials) => async (dispatch) => {
     if (!response.ok) {
       dispatch(userLoginFailure(data.message));
       return;
-      //   throw new Error(`Authentication failed with status ${response.status}`);
     }
 
     dispatch(userLoginSuccess(data));

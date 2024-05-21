@@ -7,38 +7,33 @@ import {
   BsFillSkipStartCircleFill,
   BsFillSkipEndCircleFill,
 } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsPlaying, skipToNext, skipToPrev } from "../reducers/songSlice";
 
-const Player = ({
-  isPlaying,
-  setIsPlaying,
-  currentSongIndex,
-  setCurrentSongIndex,
-  songsLength,
-  songs,
-  playerRef,
-}) => {
+const Player = ({ songsLength, songs, playerRef }) => {
   const clickRef = useRef();
-  // const [progress, setProgress] = useState(0);
+  const dispatch = useDispatch();
+  const { isPlaying, currentSongIndex } = useSelector((state) => state.songs);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
   let progress = (currentTime / duration) * 100;
   if (isNaN(progress)) progress = 0;
 
-  // if (progress == Infinity || progress == 0) {
-  //   const d = playerRef.current.getDuration();
-  //   setDuration(d);
-  // }
-  console.log(progress);
+  console.log(currentTime, duration, progress);
 
   const PlayPause = () => {
-    setIsPlaying(!isPlaying);
+    if (songs?.length > 0) {
+      dispatch(setIsPlaying(!isPlaying));
+    }
   };
 
   useEffect(() => {
-    if (playerRef.current) {
-      const d = playerRef.current.getDuration();
-      setDuration(d);
+    while (duration == undefined) {
+      if (playerRef.current) {
+        const d = playerRef.current.getDuration();
+        setDuration(d);
+      }
     }
   }, [currentSongIndex, playerRef, isPlaying]);
 
@@ -75,22 +70,6 @@ const Player = ({
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   }
 
-  const skipBack = () => {
-    if (currentSongIndex === 0) {
-      setCurrentSongIndex(songsLength - 1);
-    } else {
-      setCurrentSongIndex(currentSongIndex - 1);
-    }
-  };
-
-  const skiptoNext = () => {
-    if (currentSongIndex === songsLength - 1) {
-      setCurrentSongIndex(0);
-    } else {
-      setCurrentSongIndex(currentSongIndex + 1);
-    }
-  };
-
   return (
     <PlayerContainer className="player_container">
       <Title className="title">
@@ -106,7 +85,10 @@ const Player = ({
         </div>
       </Navigation>
       <Controls className="controls">
-        <BsFillSkipStartCircleFill className="btn_action" onClick={skipBack} />
+        <BsFillSkipStartCircleFill
+          className="btn_action"
+          onClick={() => dispatch(skipToPrev(songsLength))}
+        />
         {isPlaying ? (
           <BsFillPauseCircleFill
             className="btn_action pp"
@@ -115,7 +97,10 @@ const Player = ({
         ) : (
           <BsFillPlayCircleFill className="btn_action pp" onClick={PlayPause} />
         )}
-        <BsFillSkipEndCircleFill className="btn_action" onClick={skiptoNext} />
+        <BsFillSkipEndCircleFill
+          className="btn_action"
+          onClick={() => dispatch(skipToNext(songsLength))}
+        />
       </Controls>
     </PlayerContainer>
   );
@@ -229,10 +214,6 @@ const Controls = styled.div`
 `;
 
 Player.propTypes = {
-  isPlaying: propTypes.bool,
-  setIsPlaying: propTypes.func,
-  currentSongIndex: propTypes.number,
-  setCurrentSongIndex: propTypes.func,
   currentTime: propTypes.number,
   duration: propTypes.number,
   songsLength: propTypes.number,

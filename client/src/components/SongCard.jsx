@@ -3,18 +3,12 @@ import propTypes from "prop-types";
 import { FaPause, FaPlay } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentSongIndex, setIsPlaying } from "../reducers/songSlice";
 
-export default function SongCard({
-  index,
-  islast,
-  title,
-  artist,
-  currentSongIndex,
-  setCurrentSongIndex,
-  isPlaying,
-  setIsPlaying,
-  id,
-}) {
+export default function SongCard({ index, islast, title, artist, id }) {
+  const dispatch = useDispatch();
+  const { isPlaying, currentSongIndex } = useSelector((state) => state.songs);
   const [isCardPlaying, setIsCardPlaying] = useState(false);
 
   useEffect(() => {
@@ -22,15 +16,15 @@ export default function SongCard({
   }, [currentSongIndex, index]);
 
   const play = () => {
-    setCurrentSongIndex(index);
+    dispatch(setCurrentSongIndex(index));
     if (!isPlaying) {
-      setIsPlaying(true);
+      dispatch(setIsPlaying(true));
     }
   };
 
   const handlePlayPause = () => {
     setIsCardPlaying(!isPlaying);
-    setIsPlaying(!isPlaying);
+    dispatch(setIsPlaying(!isPlaying));
   };
 
   return (
@@ -178,8 +172,4 @@ SongCard.propTypes = {
   id: propTypes.string,
   title: propTypes.string,
   artist: propTypes.string,
-  currentSongIndex: propTypes.number,
-  setCurrentSongIndex: propTypes.func,
-  isPlaying: propTypes.bool,
-  setIsPlaying: propTypes.func,
 };

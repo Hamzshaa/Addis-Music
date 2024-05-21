@@ -99,6 +99,7 @@ export const editSong = async (req, res, next) => {
       if (!title || !artist || !url) {
         return next(errorHandler(422, "Fill in all fields."));
       }
+
       const song = await Music.findById(songId);
 
       if (!song) {
@@ -107,12 +108,6 @@ export const editSong = async (req, res, next) => {
 
       if (song.creator !== req.user.id) {
         return next(errorHandler(403, "Unauthorized"));
-      }
-
-      const music = await Music.findOne({ url: url });
-
-      if (music && music.creator === req.user.id && music._id != songId) {
-        return next(errorHandler(409, "Music already exists"));
       }
 
       const updatedSong = await Music.findByIdAndUpdate(

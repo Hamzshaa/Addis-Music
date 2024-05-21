@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import ReactPlayer from "react-player";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { deleteSongRequest, editSongRequest } from "../actions/songActions";
 
 export default function EditSong() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { error, isLoading } = useSelector((state) => state.songs);
   const [inputs, setInputs] = useState({ title: "", artist: "", url: "" });
-  const [error, setError] = useState(null);
 
   const { songId } = useParams();
 
@@ -17,12 +19,18 @@ export default function EditSong() {
         const data = await res.json();
         setInputs(data);
       } catch (error) {
-        setError(error.message);
+        console.log(error.message);
       }
     };
 
     fetchSong();
   }, [songId]);
+
+  useEffect(() => {
+    if (!isLoading && !error) {
+      navigate("/");
+    }
+  }, [navigate, error, isLoading]);
 
   const handleChange = (e) => {
     setInputs((prev) => {
@@ -32,49 +40,11 @@ export default function EditSong() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-
-    const isLinkValid = ReactPlayer.canPlay(inputs.url);
-    if (!isLinkValid) {
-      setError("Invalid YouTube URL");
-      return;
-    }
-
-    const songData = new FormData();
-    songData.set("title", inputs.title);
-    songData.set("artist", inputs.artist);
-    songData.set("url", inputs.url);
-
-    try {
-      const res = await fetch(`/api/music/edit/${songId}`, {
-        method: "PUT",
-        body: songData,
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.message);
-      } else {
-        setError(null);
-        navigate("/");
-      }
-    } catch (error) {
-      setError(error.message);
-    }
+    dispatch(editSongRequest(inputs));
   };
 
   const handleDelete = async () => {
-    setError(null);
-    try {
-      await fetch(`/api/music/delete/${songId}`, {
-        method: "DELETE",
-      });
-
-      navigate("/");
-    } catch (error) {
-      setError(error.message);
-      navigate("/");
-    }
+    dispatch(deleteSongRequest(songId));
   };
 
   return (

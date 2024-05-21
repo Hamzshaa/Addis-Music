@@ -2,13 +2,7 @@ import styled from "styled-components";
 import SongCard from "./SongCard";
 import propTypes from "prop-types";
 
-export default function SongList({
-  songs,
-  currentSongIndex,
-  setCurrentSongIndex,
-  isPlaying,
-  setIsPlaying,
-}) {
+export default function SongList({ songs }) {
   return (
     <SongListContainer>
       {songs &&
@@ -20,10 +14,6 @@ export default function SongList({
             id={song._id}
             title={song.title}
             artist={song.artist}
-            currentSongIndex={currentSongIndex}
-            setCurrentSongIndex={setCurrentSongIndex}
-            isPlaying={isPlaying}
-            setIsPlaying={setIsPlaying}
             islast={songs[songs.length - 1] === song}
           />
         ))}
@@ -37,8 +27,4 @@ const SongListContainer = styled.div`
 
 SongList.propTypes = {
   songs: propTypes.array,
-  setCurrentSongIndex: propTypes.func,
-  currentSongIndex: propTypes.number,
-  isPlaying: propTypes.bool,
-  setIsPlaying: propTypes.func,
 };

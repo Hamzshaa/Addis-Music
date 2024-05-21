@@ -3,59 +3,44 @@ import SongList from "../components/SongList";
 import { Link } from "react-router-dom";
 
 import ReactPlayer from "react-player/youtube";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Player from "../components/Player";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSongs } from "../actions/songActions";
+import {
+  handleEnded,
+  // setCurrentSongIndex,
+  setIsPlaying,
+} from "../reducers/songSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const playerRef = useRef(null);
-  const { songs, isLoading, error } = useSelector((state) => state.songs); // eslint-disable-line
+
+  // eslint-disable-next-line
+  const { songs, isPlaying, currentSongIndex, isLoading, error } = useSelector(
+    (state) => state.songs
+  );
+
+  console.log({ songs, isPlaying, currentSongIndex, isLoading, error });
 
   useEffect(() => {
     dispatch(fetchSongs());
   }, []);
 
-  const handleEnded = () => {
-    console.log("ended");
-    if (currentSongIndex < songs?.length - 1) {
-      setCurrentSongIndex(currentSongIndex + 1);
-    } else {
-      setCurrentSongIndex(0);
-    }
-  };
-
   return (
     <div>
-      <Player
-        songsLength={songs.length}
-        songs={songs}
-        playerRef={playerRef}
-        isPlaying={isPlaying}
-        setIsPlaying={setIsPlaying}
-        currentSongIndex={currentSongIndex}
-        setCurrentSongIndex={setCurrentSongIndex}
-      />
+      <Player songsLength={songs.length} songs={songs} playerRef={playerRef} />
       <ReactPlayer
         playing={isPlaying}
-        url={songs[currentSongIndex]?.url}
-        // loop={true}
+        url={songs[currentSongIndex]?.url || ""}
         ref={playerRef}
-        onEnded={handleEnded}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
+        onEnded={() => dispatch(handleEnded())}
+        onPlay={() => dispatch(setIsPlaying(true))}
+        onPause={() => dispatch(setIsPlaying(false))}
         style={{ display: "none" }}
       />
-      <SongList
-        songs={songs}
-        currentSongIndex={currentSongIndex}
-        setCurrentSongIndex={setCurrentSongIndex}
-        isPlaying={isPlaying}
-        setIsPlaying={setIsPlaying}
-      />
+      <SongList songs={songs} />
       <Button>
         <Link to="/add">
           <AddMusicButton>Add Music</AddMusicButton>
