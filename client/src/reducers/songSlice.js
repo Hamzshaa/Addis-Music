@@ -8,6 +8,7 @@ const songSlice = createSlice({
     error: null,
     isPlaying: false,
     currentSongIndex: 0,
+    selectedSong: {},
   },
   reducers: {
     fetchSongs: (state) => {
@@ -23,6 +24,19 @@ const songSlice = createSlice({
     getSongsError: (state, action) => {
       state.error = action.payload;
       state.isLoading = true;
+    },
+    selectSong: (state) => {
+      state.error = null;
+      state.isLoading = true;
+    },
+    selectSongSuccess: (state, action) => {
+      state.selectedSong = action.payload;
+      state.isLoading = false;
+      state.error = null;
+    },
+    selectSongFailure: (state, action) => {
+      state.error = action.payload;
+      state.isLoading = false;
     },
     setIsPlaying: (state, action) => {
       state.isPlaying = action.payload;
@@ -69,8 +83,8 @@ const songSlice = createSlice({
       state.error = null;
     },
     editSongSuccess: (state, action) => {
-      const { id, title, artist, url } = action.payload;
-      const song = state.songs.find((song) => song._id === id);
+      const { _id, title, artist, url } = action.payload;
+      const song = state.songs.find((song) => song._id === _id);
       song.title = title;
       song.artist = artist;
       song.url = url;
@@ -80,6 +94,7 @@ const songSlice = createSlice({
     editSongFailure: (state, action) => {
       state.error = action.payload;
       state.isLoading = false;
+      state.selectedSong = {};
     },
     startDeleteSong: (state) => {
       state.isLoading = true;
@@ -102,6 +117,9 @@ export const {
   fetchSongs,
   getSongsSuccess,
   getSongsError,
+  selectSong,
+  selectSongSuccess,
+  selectSongFailure,
   setIsPlaying,
   setCurrentSongIndex,
   handleEnded,

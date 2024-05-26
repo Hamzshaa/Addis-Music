@@ -13,45 +13,38 @@ export default function Navbar() {
 
   return (
     <NavContainer>
-      <Nav>
-        <Link to="/">
-          {" "}
-          <Logo>Addis Music</Logo>
-        </Link>
-        <Menus>
-          <Link
-            to="/      
+      <NavInnerWrapper>
+        <Nav>
+          <Link to="/">
+            {" "}
+            <Logo>
+              <img src="logo.png" alt="" />
+              <h2>Addis Music</h2>
+            </Logo>
+          </Link>
+          <Menus>
+            <Link
+              to="/      
       "
-          >
-            <p>Home</p>
-          </Link>
-          <Link
-            to="/add   
+            >
+              <p>Home</p>
+            </Link>
+            <Link
+              to="/add   
          "
-          >
-            <p>Add</p>
-          </Link>
-          {/* <Link
-            to="/about 
-           "
-          >
-            <p>About</p>
-          </Link>
-          <Link
-            to="contact
-            "
-          >
-            <p>Contact</p>
-          </Link> */}
-        </Menus>
-      </Nav>
-      {currentUser ? (
-        <Sign onClick={handleSignout}>Sign Out</Sign>
-      ) : (
-        <Sign>
-          <Link to="signin">Sign In</Link>
-        </Sign>
-      )}
+            >
+              <p>Add</p>
+            </Link>
+          </Menus>
+        </Nav>
+        {currentUser ? (
+          <Sign onClick={handleSignout}>Sign Out</Sign>
+        ) : (
+          <Sign>
+            <Link to="signin">Sign In</Link>
+          </Sign>
+        )}
+      </NavInnerWrapper>
     </NavContainer>
   );
 }
@@ -64,23 +57,29 @@ const NavContainer = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
+  align-items: center;
+
   a {
     text-decoration: none;
   }
 `;
 
+const NavInnerWrapper = styled.div`
+  max-width: 800px;
+  width: 100%;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  text-align: center;
+`;
+
 const Nav = styled.nav`
   color: white;
-  padding: 1rem 2rem;
+  padding: 0rem 2rem;
   text-align: center;
   display: flex;
   justify-content: space-between;
-  max-width: 800px;
-  width: 100%;
-
-  /* @media (max-width: 768px) {
-    font-size: 1.2rem;
-  } */
+  flex: 1;
 
   @media (max-width: 576px) {
     padding: 1rem 1rem 1rem 0.4rem;
@@ -88,16 +87,29 @@ const Nav = styled.nav`
 `;
 
 const Logo = styled.h1`
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: white;
+  height: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    object-fit: cover;
+    height: 40px;
+    margin-top: 5px;
+  }
 
   @media (max-width: 768px) {
     font-size: 1.2rem;
   }
 
   @media (max-width: 576px) {
-    font-size: 1rem;
+    font-size: 0.8rem;
+    img {
+      height: 30px;
+    }
   }
 `;
 
