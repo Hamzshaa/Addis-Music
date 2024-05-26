@@ -76,13 +76,14 @@ const CardContainer = styled.div`
 `;
 
 const ImgWrapper = styled.div`
-  width: 100px;
+  width: 80px;
   height: 80px;
   overflow: hidden;
   display: flex;
   justify-content: center;
   img {
     width: 100%;
+    height: fit-content;
     object-fit: cover;
     transition: transform 0.5s ease;
 

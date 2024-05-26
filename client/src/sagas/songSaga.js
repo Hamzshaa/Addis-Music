@@ -6,6 +6,8 @@ import {
   addSongSuccess,
   deleteSongFailure,
   deleteSongSuccess,
+  selectSongSuccess,
+  selectSongFailure,
 } from "../reducers/songSlice";
 import ReactPlayer from "react-player";
 
@@ -16,6 +18,17 @@ function* workFetchSongs() {
     yield put(getSongsSuccess(formattedSongs));
   } catch (error) {
     yield put(getSongsError(error));
+  }
+}
+
+function* workSelectSong(action) {
+  try {
+    const songId = action.payload;
+    const song = yield call(() => fetch(`/api/music/${songId}`));
+    const formattedSong = yield song.json();
+    yield put(selectSongSuccess(formattedSong));
+  } catch (error) {
+    yield put(selectSongFailure(error.message));
   }
 }
 
@@ -52,26 +65,28 @@ function* workAddSong(action) {
 
 function* workEditSong(action) {
   try {
-    const song = action.payload;
-    const isLinkValid = ReactPlayer.canPlay(song?.url);
+    const { inputs, songId } = action.payload;
+    const isLinkValid = ReactPlayer.canPlay(inputs?.url);
     if (!isLinkValid) {
       yield put(addSongFailure("Invalid YouTube URL"));
       return;
     }
     const songData = new FormData();
-    songData.set("title", song?.title);
-    songData.set("artist", song?.artist);
-    songData.set("url", song?.url);
+    songData.set("title", inputs?.title);
+    songData.set("artist", inputs?.artist);
+    songData.set("url", inputs?.url);
     const res = yield call(() =>
-      fetch(`/api/music/edit/${song._id}`, {
+      fetch(`/api/music/edit/${songId}`, {
         method: "PUT",
         body: songData,
       })
     );
+    console.log(res);
     const data = yield res.json();
     if (!res.ok) {
       yield put(addSongFailure(data.message));
     } else {
+      console.log(data);
       yield put(addSongSuccess(data));
     }
   } catch (error) {
@@ -95,6 +110,9 @@ function* workDeleteSong(action) {
 
 export function* watchFetchSongs() {
   yield takeEvery("songs/fetchSongs", workFetchSongs);
+}
+export function* watchSelectSong() {
+  yield takeEvery("songs/selectSong", workSelectSong);
 }
 export function* watchAddSong() {
   yield takeEvery("songs/startAddSong", workAddSong);

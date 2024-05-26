@@ -7,11 +7,7 @@ import { useEffect, useRef } from "react";
 import Player from "../components/Player";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSongs } from "../actions/songActions";
-import {
-  handleEnded,
-  // setCurrentSongIndex,
-  setIsPlaying,
-} from "../reducers/songSlice";
+import { handleEnded, setIsPlaying } from "../reducers/songSlice";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -28,9 +24,22 @@ export default function Home() {
     dispatch(fetchSongs());
   }, []);
 
+  const handleDoubleClick = () => {
+    const duration = playerRef.current.getDuration();
+    const currentTime = playerRef.current.getCurrentTime();
+    if (currentTime + 10 < duration)
+      playerRef.current.seekTo(currentTime + 10, "seconds");
+  };
+
   return (
     <div>
-      <Player songsLength={songs.length} songs={songs} playerRef={playerRef} />
+      <PlayerContainer onDoubleClick={handleDoubleClick}>
+        <Player
+          songsLength={songs.length}
+          songs={songs}
+          playerRef={playerRef}
+        />
+      </PlayerContainer>
       <ReactPlayer
         playing={isPlaying}
         url={songs[currentSongIndex]?.url || ""}
@@ -49,6 +58,12 @@ export default function Home() {
     </div>
   );
 }
+
+const PlayerContainer = styled.div`
+  width: auto;
+  max-width: 800px;
+  margin-inline: auto;
+`;
 
 const Button = styled.div`
   display: flex;

@@ -2,35 +2,44 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { deleteSongRequest, editSongRequest } from "../actions/songActions";
+import {
+  deleteSongRequest,
+  editSongRequest,
+  selectedSongRequest,
+} from "../actions/songActions";
 
 export default function EditSong() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { error, isLoading } = useSelector((state) => state.songs);
-  const [inputs, setInputs] = useState({ title: "", artist: "", url: "" });
+  const { error, isLoading, selectedSong } = useSelector(
+    (state) => state.songs
+  );
+  const [inputs, setInputs] = useState({
+    title: "",
+    artist: "",
+    url: "",
+  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const { songId } = useParams();
 
   useEffect(() => {
-    const fetchSong = async () => {
-      try {
-        const res = await fetch(`/api/music/${songId}`);
-        const data = await res.json();
-        setInputs(data);
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-
-    fetchSong();
-  }, [songId]);
+    dispatch(selectedSongRequest(songId));
+  }, [songId, dispatch]);
 
   useEffect(() => {
-    if (!isLoading && !error) {
+    setInputs({
+      title: selectedSong?.title,
+      artist: selectedSong?.artist,
+      url: selectedSong?.url,
+    });
+  }, [selectedSong]);
+
+  useEffect(() => {
+    if (isSubmitted && !isLoading && !error) {
       navigate("/");
     }
-  }, [navigate, error, isLoading]);
+  }, [navigate, error, isLoading, isSubmitted]);
 
   const handleChange = (e) => {
     setInputs((prev) => {
@@ -40,18 +49,22 @@ export default function EditSong() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(editSongRequest(inputs));
+    setIsSubmitted(false);
+    dispatch(editSongRequest({ inputs, songId }));
+    setIsSubmitted(true);
   };
 
   const handleDelete = async () => {
+    setIsSubmitted(false);
     dispatch(deleteSongRequest(songId));
+    setIsSubmitted(true);
   };
 
   return (
     <EditSongContainer>
       <h1>Edit Song</h1>
       <form onSubmit={handleSubmit}>
-        {error && <Error>{error}</Error>}
+        {error && typeof error == "string" && <Error>{error}</Error>}
         <div>
           <label>Title</label>
           <input
@@ -59,7 +72,7 @@ export default function EditSong() {
             id="title"
             autoComplete="off"
             onChange={handleChange}
-            value={inputs.title}
+            value={inputs?.title}
           />
         </div>
         <div>
@@ -69,7 +82,7 @@ export default function EditSong() {
             id="artist"
             autoComplete="off"
             onChange={handleChange}
-            value={inputs.artist}
+            value={inputs?.artist}
           />
         </div>
         <div>
@@ -79,7 +92,7 @@ export default function EditSong() {
             id="url"
             autoComplete="off"
             onChange={handleChange}
-            value={inputs.url}
+            value={inputs?.url}
           />
         </div>
         <button type="submit">Update</button>
