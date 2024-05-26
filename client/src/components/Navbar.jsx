@@ -87,7 +87,7 @@ const Nav = styled.nav`
 `;
 
 const Logo = styled.h1`
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: white;
   height: 52px;
@@ -97,7 +97,7 @@ const Logo = styled.h1`
 
   img {
     object-fit: cover;
-    height: 45px;
+    height: 40px;
     margin-top: 5px;
   }
 
